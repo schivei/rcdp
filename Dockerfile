@@ -31,7 +31,12 @@ COPY ./docs/swagger.* ./docs/
 USER root
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends dumb-init && \
+    apt-get install -y --no-install-recommends \
+      libnss3 \
+      libexpat1 \
+      libfontconfig1 \
+      libuuid1 \
+      dumb-init && \
     apt-get autoremove -y --purge && \
     apt-get autoclean -y && \
     apt-get clean -y && \
