@@ -1,0 +1,732 @@
+basePath: /
+definitions:
+  main.CP:
+    properties:
+      domain:
+        description: Cookie domain.
+        type: string
+      expires:
+        description: Cookie expiration date, session cookie if not set
+        example: "2022-03-29T00:00:00Z"
+        format: string
+        type: string
+      httpOnly:
+        description: True if cookie is http-only.
+        type: boolean
+      name:
+        description: Cookie name.
+        type: string
+      partitionKey:
+        description: Cookie partition key. The site of the top-level URL the browser
+          was visiting at the start of the request to the endpoint that set the cookie.
+          If not set, the cookie will be set as not partitioned.
+        type: string
+      path:
+        description: Cookie path.
+        type: string
+      priority:
+        description: |-
+          CookiePriority enum:
+          * Low - low
+          * Medium - medium
+          * High - hight
+        example: Low
+        type: string
+      sameParty:
+        description: True if cookie is SameParty.
+        type: boolean
+      sameSite:
+        description: |-
+          CookieSameSite enum:
+          * Strict - strict
+          * Lax - lax
+          * None - none
+        example: Strict
+        type: string
+      secure:
+        description: True if cookie is secure.
+        type: boolean
+      sourcePort:
+        description: Cookie source port. Valid values are {-1, [1, 65535]}, -1 indicates
+          an unspecified port. An unspecified port value allows protocol clients to
+          emulate legacy cookie scope for the port. This is a temporary ability and
+          it will be removed in the future.
+        type: integer
+      sourceScheme:
+        description: |-
+          CookieSourceScheme enum:
+          * Unset
+          * NonSecure
+          * Secure
+        example: Unset
+        type: string
+      url:
+        description: The request-URI to associate with the setting of the cookie.
+          This value can affect the default domain, path, source port, and source
+          scheme values of the created cookie.
+        type: string
+      value:
+        description: Cookie value.
+        type: string
+    type: object
+  main.XY:
+    properties:
+      x:
+        description: X coordinate
+        example: 100
+        format: float64
+        type: number
+      "y":
+        example: 100
+        format: float64
+        type: number
+    type: object
+  main.attrRequest:
+    properties:
+      attribute:
+        description: Attribute name
+        example: name
+        format: string
+        type: string
+      data:
+        description: Content data
+        example: el_name
+        format: string
+        type: string
+      selector:
+        description: XPATH Selector
+        example: id("btn_login")
+        format: string
+        type: string
+      set:
+        description: 'Setter: if true set value to attribute, otherwise retrieve data
+          from attribute'
+        example: true
+        format: bool
+        type: boolean
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.attrResponse:
+    properties:
+      content:
+        type: string
+      document:
+        type: string
+      error:
+        $ref: '#/definitions/main.internalError'
+      evidence:
+        type: string
+      time:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  main.dataResponse:
+    properties:
+      document:
+        type: string
+      error:
+        $ref: '#/definitions/main.internalError'
+      evidence:
+        type: string
+      time:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  main.innerRequest:
+    properties:
+      selector:
+        description: XPATH Selector
+        example: id("btn_login")
+        format: string
+        type: string
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+    type: object
+  main.innerResponse:
+    properties:
+      content:
+        type: string
+      document:
+        type: string
+      error:
+        $ref: '#/definitions/main.internalError'
+      evidence:
+        type: string
+      time:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  main.internalError:
+    properties:
+      cause:
+        type: string
+      inner_error:
+        $ref: '#/definitions/main.internalError'
+      message:
+        type: string
+    type: object
+  main.jsRequest:
+    properties:
+      script:
+        description: javascript to be executed
+        example: ""
+        type: string
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.jsResponse:
+    properties:
+      content: {}
+      document:
+        type: string
+      error:
+        $ref: '#/definitions/main.internalError'
+      evidence:
+        type: string
+      time:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  main.mouseRequest:
+    properties:
+      button:
+        description: |-
+          Mouse Button:
+          * left - Left Button
+          * middle - Wheel Button
+          * right - Right Button
+        type: string
+        x-nullable: true
+      event:
+        description: |-
+          Event type:
+          * click - Click Event
+          * mouseover - Mouseover Event
+          * mouseout - Mouseout Event
+          * scroll - Scroll Event
+          * mousedown - Mousedown Event
+          * mouseup - Mouseup Event
+        example: click
+        format: string
+        type: string
+      position:
+        $ref: '#/definitions/main.XY'
+        description: Click at position
+      selector:
+        description: XPATH Selector
+        example: id("btn_login")
+        format: string
+        type: string
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      times:
+        description: Number of consecutive clicks
+        example: 1
+        format: int
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.navigateRequest:
+    properties:
+      cookies:
+        description: Cookies to inject
+        items:
+          $ref: '#/definitions/main.CP'
+          format: json
+        type: array
+      headers:
+        additionalProperties:
+          type: string
+        description: Headers to inject
+        format: json
+        type: object
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      url:
+        description: Url to navigate
+        example: https://example.com
+        format: string
+        type: string
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.refreshRequest:
+    properties:
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.selectRequest:
+    properties:
+      data:
+        description: The data for select_by filter
+        example:
+        - '["city"]'
+        items:
+          type: string
+        type: array
+      select_by:
+        description: |-
+          Event type:
+          * index - The option position
+          * text - The option text
+          * partialtext - The option that contains a text
+          * regex - The option text/value matchs
+          * value - The option value
+        example: value
+        format: string
+        type: string
+      selector:
+        description: XPATH Selector
+        example: id("sel_options")
+        format: string
+        type: string
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.startResponse:
+    properties:
+      document:
+        type: string
+      error:
+        $ref: '#/definitions/main.internalError'
+      evidence:
+        type: string
+      session_code:
+        type: string
+      time:
+        type: integer
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  main.typeRequest:
+    properties:
+      content:
+        description: Data content with special keys like ArrowDown (\u0301)
+        example: test@test.com\u0301
+        format: string
+        type: string
+      force:
+        description: Force type
+        example: false
+        format: bool
+        type: boolean
+      normalized_content:
+        description: Normalized is content withour special keys
+        example: test@test.com
+        format: string
+        type: string
+      selector:
+        description: XPATH Selector
+        example: id("btn_login")
+        format: string
+        type: string
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      wait_for:
+        description: Wait for XPATH visible
+        example: //form/input[2]
+        format: string
+        type: string
+    type: object
+  main.viewportRequest:
+    properties:
+      height:
+        type: integer
+      timeout:
+        description: Timeout in nanoseconds
+        example: 1000000000
+        format: int64
+        type: integer
+      width:
+        type: integer
+    type: object
+host: localhost:12345
+info:
+  contact: {}
+  title: Remote Chrome DevTools Protocol
+  version: 1.0.0
+paths:
+  /{session_code}/attribute:
+    post:
+      description: Get or Set element attribute
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.attrRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.attrResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Get or Set element attribute
+      tags:
+      - Attributes
+  /{session_code}/close:
+    delete:
+      description: Close browser
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Close browser
+      tags:
+      - Close browser
+  /{session_code}/inner_html:
+    post:
+      description: Get inner HTML from element
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.innerRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.innerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Get inner HTML from element
+      tags:
+      - Inner HTML
+  /{session_code}/inner_text:
+    post:
+      description: Get inner Text from element
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.innerRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.innerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Get inner Text from element
+      tags:
+      - Inner Text
+  /{session_code}/javascript:
+    post:
+      description: Execute script
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.jsRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.jsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Execute script
+      tags:
+      - Javascript
+  /{session_code}/mouse:
+    post:
+      description: Mouse Event
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.mouseRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Mouse Event
+      tags:
+      - Mouse Event
+  /{session_code}/navigateRequest:
+    post:
+      description: Navigate Page
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.navigateRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Navigate Page
+      tags:
+      - Navigate
+  /{session_code}/refreshRequest:
+    post:
+      description: Refresh Page
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.refreshRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Refresh Page
+      tags:
+      - Refresh
+  /{session_code}/screenshot:
+    get:
+      description: Screenshot
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Screenshot
+      tags:
+      - Screenshot
+  /{session_code}/select_option:
+    post:
+      description: Select
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.selectRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Select
+      tags:
+      - Select
+  /{session_code}/type:
+    post:
+      description: Type value
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.typeRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Type value
+      tags:
+      - Type value
+  /{session_code}/viewport:
+    post:
+      description: Window size
+      parameters:
+      - description: content data
+        in: body
+        name: content
+        required: true
+        schema:
+          $ref: '#/definitions/main.viewportRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Window size
+      tags:
+      - Window size
+  /start:
+    get:
+      description: Start Browser
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.startResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.dataResponse'
+      summary: Start Browser
+      tags:
+      - Start
+swagger: "2.0"

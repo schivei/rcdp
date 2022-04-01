@@ -1,0 +1,14 @@
+version: '3'
+services:
+  rcpd:
+    build: "./docker/go-debug"
+    volumes:
+      - ".:/go/src/rcdp:rw"
+    environment:
+      GO_WORK_DIR: "/go/src/rcdp"
+    ports:
+      - "12345:12345"
+      - "2345:2345"
+      - "9222:9222"
+    security_opt:
+      - "seccomp:unconfined"
