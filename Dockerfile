@@ -10,7 +10,17 @@ RUN go build -a -o /rcdp
 
 FROM chromedp/headless-shell:latest as chrome-headless
 
+FROM debian:stable-slim as compose
+
 WORKDIR /
+
+COPY --from=chrome-headless \
+    /headless-shell/headless-shell \
+    /headless-shell/.stamp \
+    /headless-shell/*.so \
+    /headless-shell/
+
+ENV PATH /headless-shell:$PATH
 
 COPY docker/go-debug/root/headless.sh /
 COPY docker/go-debug/root/runner.sh /
@@ -21,11 +31,7 @@ COPY ./docs/swagger.* ./docs/
 USER root
 
 RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-      apt-transport-https \
-      ca-certificates \
-      dumb-init \
-      apt-utils && \
+    apt-get install -y --no-install-recommends dumb-init && \
     apt-get autoremove -y --purge && \
     apt-get autoclean -y && \
     apt-get clean -y && \
@@ -38,7 +44,7 @@ RUN apt-get update -y && \
 
 ENTRYPOINT ["dumb-init", "--"]
 
-FROM chrome-headless as rcdp
+FROM compose as rcdp
 LABEL name="remote-chrome-devtools-protocol" \
 	  maintainer="Elton Schivei Costa <costa@elton.schivei.nom.br>" \
 	  version="1.0" \
